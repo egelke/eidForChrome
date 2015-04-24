@@ -10,5 +10,6 @@
   </parent>
   <artifactId>native-installer</artifactId>
   <packaging>pom</packaging>
+ 
   
 </project>

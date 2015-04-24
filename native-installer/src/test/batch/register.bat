@@ -1,0 +1,1 @@
+REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\net.egelke.chrome.eid.native" /ve /t REG_SZ /d "%~dp0..\..\main\resources\manifest.json" /f

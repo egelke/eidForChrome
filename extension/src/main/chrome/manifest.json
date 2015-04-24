@@ -15,5 +15,8 @@
             "matches": ["https://*/*"],
             "js": ["eid-ct.js"]
         }
+    ],
+    "permissions": [
+        "nativeMessaging"
     ]
 }
