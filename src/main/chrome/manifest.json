@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "eID Extension",
+    "description": "This extension gives access to eID from within Chrome",
+    "version": "1.0.0",
+    "background": {
+        "scripts": ["eid-bg.js"],
+        "persistent": false
+    },
+    "page_action": {
+        "default_icon": "icon38.png",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [{
+            "matches": ["https://*/*"],
+            "js": ["eid-ct.js"]
+        }
+    ]
+}
