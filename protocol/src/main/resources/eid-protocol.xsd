@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="1.0" xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+        targetNamespace="urn:be:e-contract:eid:protocol:1.0" xmlns:tns="urn:be:e-contract:eid:protocol:1.0">
+    
+    <annotation>
+        <documentation>
+            Generic eID protocol definition.
+        </documentation>
+    </annotation>
+    
+    <element name="AuthenticationRequest" type="tns:AuthenticationRequestType"/>
+    
+    <complexType name="AuthenticationRequestType">
+        <sequence>
+            <element name="Challenge" type="xs:base64Binary">
+                <annotation>
+                    <documentation>
+                        20 bytes (SHA-1 sized) challenge.
+                    </documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    
+    <element name="AuthenticationResponse" type="tns:AuthenticationResponseType"/>
+    
+    <complexType name="AuthenticationResponseType">
+        <sequence>
+            <element name="ChallengeResponse" type="xs:base64Binary">
+                <annotation>
+                    <documentation>
+                        The challenge response, i.e., an RSA PKCS#1 signature over the challenge.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="CertificateChain" type="tns:CertificateChainType">
+                <annotation>
+                    <documentation>
+                        The eID authentication certificate chain.
+                    </documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    
+    <complexType name="CertificateChainType">
+        <sequence>
+            <element name="Certificate" type="xs:base64Binary" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+    
+</schema>

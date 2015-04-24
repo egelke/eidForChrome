@@ -14,6 +14,7 @@
 	<module>extension</module>
 	<module>native</module>
 	<module>native-installer</module>
+        <module>protocol</module>
   </modules>
   
 </project>
