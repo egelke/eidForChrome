@@ -15,6 +15,7 @@
 	<module>native</module>
 	<module>native-installer</module>
         <module>protocol</module>
+    <module>tests</module>
   </modules>
   
 </project>
