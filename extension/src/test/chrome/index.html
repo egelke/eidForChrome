@@ -10,8 +10,12 @@
             console.log("Page: forward");
             console.dir(event.data);
             
-            //TODO:send to the server, return the response via 
-            //window.postMessage(rsp, '*');
+            //TODO:send to the server to get a real response
+            window.postMessage({
+                type: 'eid-req', 
+                action: 'cmd',
+                data: null
+            }, '*');
         }
         
         window.addEventListener("message", forward, false);
