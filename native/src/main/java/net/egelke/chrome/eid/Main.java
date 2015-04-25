@@ -8,36 +8,44 @@ package net.egelke.chrome.eid;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author bryan_000
  */
 public class Main {
+
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
     
-    public static void main(String [] args) throws IOException {
-        DataInputStream dis = new DataInputStream(System.in);
-        DataOutputStream dos = new DataOutputStream(System.out);
-        
+    public static void main(String[] args) throws Throwable {
         try {
-            int len = dis.readInt();
-            byte[] buffer = new byte[len];
+            logger.debug("Start native eid process");
+            
+            ByteBuffer bb = ByteBuffer.allocate(4);
+            bb.order(ByteOrder.nativeOrder());
+            
+            byte[] buffer = new byte[4];
+            IOUtils.readFully(System.in, buffer);
+            bb.put(buffer);
+            bb.flip();
 
-            int count = 0;
-            while (count < len) {
-                int read = dis.read(buffer, count, len - count);
-                if (read < 0) throw new IOException("Premature end of stream");
-                count += read;
-            }
+            buffer = new byte[bb.getInt()];
+            IOUtils.readFully(System.in, buffer);
 
-            //Lets start with a basic echo
-
-            dos.write(len);
-            dos.write(buffer);
-            dos.flush();
-        } finally {
-            dis.close();
-            dos.close();
+            bb.rewind();
+            bb.putInt(buffer.length);
+            IOUtils.write(bb.array(), System.out);
+            IOUtils.write(buffer, System.out);
+            
+            logger.debug("End native eid process");
+        } catch (Throwable e) {
+            logger.error("Fatal error", e);
+            throw e;
         }
     }
 }
