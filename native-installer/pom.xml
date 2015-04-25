@@ -9,6 +9,7 @@
     <version>1.0.0</version>
   </parent>
   <artifactId>native-installer</artifactId>
+  <name>eID Chrome - native installer</name>
   <packaging>pom</packaging>
  
   
