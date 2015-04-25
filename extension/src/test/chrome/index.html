@@ -3,11 +3,29 @@
 <header>
     <meta charset="UTF-8">
     <title>eID Test</title>
+    <script type="text/javascript">
+        function send(msg) {
+            console.log("Page.send")
+            window.postMessage(msg, '*');
+        }
+        
+        function receive(event) {
+            if (event.source !== window || event.data.type !== 'eid-rsp') return;
+            
+            console.log("Page.receive");
+            console.dir(event.data);
+            
+            //alert("Event");
+        }
+        
+        window.addEventListener("message", receive, false);
+    </script>
 </header>
 <body>
 Hello!
 <div id='eid'>
 Please install the eID for Chrome extension!
 </div>
+<button onclick="send({ type: 'eid-req', action: 'start'});">Start</button>
 </body>
 </html>
