@@ -4,20 +4,30 @@ var Eid = (function () {
     function Eid () {
         this.port = chrome.runtime.connect({name: "eid"});
         this.port.onMessage.addListener(this.bgMsg);
+        
+        this.port.postMessage({
+            type: 'eid-req', 
+            action: 'start'
+        });
     }
     
     Eid.prototype.bgMsg = function (msg) {
-        console.log('eid-ct: Background message');
+        console.log('eid-ct: forward output');
         console.dir(msg); 
-        
-        if (msg.action === 'UI') {
-            //TODO
+
+        if (msg.action === 'end') {
+            this.port.disconnect();
+            this.port = null;
+        } else {
+            if (msg.action === 'UI') {
+                //TODO
+            } 
+            window.postMessage(msg, "*");
         }
-        window.postMessage(msg, "*");
     };
     
     Eid.prototype.pgMsg = function (msg) {
-        console.log('eid-ct: Page message');
+        console.log('eid-ct: forward input');
         console.dir(msg);
         
         this.port.postMessage(msg);
