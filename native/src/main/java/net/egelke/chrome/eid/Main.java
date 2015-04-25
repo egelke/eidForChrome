@@ -5,11 +5,15 @@
  */
 package net.egelke.chrome.eid;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonWriter;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +40,23 @@ public class Main {
 
             buffer = new byte[bb.getInt()];
             IOUtils.readFully(System.in, buffer);
+            
+            JsonReader inputReader = Json.createReader(new ByteArrayInputStream(buffer));
+            JsonObject input = inputReader.readObject();
+
+            //do the business logic
+            logger.info("Received action: " + input.getString("action"));
+            
+            JsonObjectBuilder outputBuilder = Json.createObjectBuilder();
+            outputBuilder.add("type", "eid-rsp");
+            outputBuilder.add("action", "hello");
+            JsonObject output = outputBuilder.build();
+            
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            JsonWriter outputWriter = Json.createWriter(outputStream);
+            outputWriter.write(output);
+            outputWriter.close();
+            buffer = outputStream.toByteArray();
 
             bb.rewind();
             bb.putInt(buffer.length);
