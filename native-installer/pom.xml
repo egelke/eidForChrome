@@ -1,16 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>net.egelke.chome.eid</groupId>
-    <artifactId>parent</artifactId>
-    <version>1.0.0</version>
-  </parent>
-  <artifactId>native-installer</artifactId>
-  <name>eID Chrome - native installer</name>
-  <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.egelke.chrome.eid</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>native-installer</artifactId>
+    <name>eID Chrome - native installer</name>
+    <packaging>jar</packaging>
  
-  
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+        <plugins>
+            <!-- TODO: add IzPack (http://izpack.codehaus.org/izpack-maven-plugin/#usage.html) -->
+        </plugins>
+    </build>
 </project>

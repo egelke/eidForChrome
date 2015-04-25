@@ -1,4 +1,6 @@
 
+var application = 'net.egelke.chrome.eid.native';
+
 function onClose() {
     console.log("Disconnected");
     this.svPort = null;
@@ -11,6 +13,13 @@ function onNtMsg(msg) {
     this.ctPort.postMessage(msg);
 }
 
+/*
+function log(msg) {
+    console.log('eid-bg: log');
+    console.dir(msg);
+}
+*/
+
 function onCtMsg(msg) {
     console.log('eid-bg: forward input');
     console.dir(msg);
@@ -18,13 +27,14 @@ function onCtMsg(msg) {
     if (msg.action === "start" && this.svPort == null) {
         chrome.pageAction.show(this.ctPort.sender.tab.id);
 
-        this.svPort = chrome.runtime.connectNative('net.egelke.chrome.eid.native');
+        this.svPort = chrome.runtime.connectNative(application);
         this.svPort.onMessage.addListener(onNtMsg);
         this.svPort.onDisconnect.addListener(onClose);
     }
     console.assert(this.svPort != null, "No native program active");
     
     this.svPort.postMessage(msg);
+    //chrome.runtime.sendNativeMessage(application, msg, log);
 }
 
 

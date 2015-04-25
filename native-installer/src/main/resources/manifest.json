@@ -1,9 +1,9 @@
 {
   "name": "net.egelke.chrome.eid.native",
   "description": "eID Extension",
-  "path": "C:\\Program Files\\My Application\\chrome_native_messaging_host.exe",
+  "path": "C:\\Users\\bryan_000\\Documents\\GitHub\\eidForChrome\\native-installer\\src\\main\\batch\\run.bat",
   "type": "stdio",
   "allowed_origins": [
-    "chrome-extension://gobfdcjgkliegfampcpblpehlpjncich/"
+    "chrome-extension://cmeippplinaomogekpalnkolligmocep/"
   ]
 }

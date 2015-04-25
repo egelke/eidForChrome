@@ -4,12 +4,27 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>net.egelke.chome.eid</groupId>
+    <groupId>net.egelke.chrome.eid</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0</version>
   </parent>
   <artifactId>native</artifactId>
   <name>eID Chrome - native</name>
-  <packaging>pom</packaging>
-  
+  <packaging>jar</packaging>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+            <archive>
+                <manifest>
+                    <mainClass>net.egelke.chrome.eid.Main</mainClass>
+                </manifest>
+            </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

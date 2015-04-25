@@ -1,1 +1,2 @@
-REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\net.egelke.chrome.eid.native" /ve /t REG_SZ /d "%~dp0..\..\main\resources\manifest.json" /f
+REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\net.egelke.chrome.eid.native" /ve /t REG_SZ /d "C:\Users\bryan_000\Documents\GitHub\eidForChrome\native-installer\src\main\resources\manifest.json" /f
+REG ADD "HKLM\Software\Google\Chrome\NativeMessagingHosts\net.egelke.chrome.eid.native" /ve /t REG_SZ /d "C:\Users\bryan_000\Documents\GitHub\eidForChrome\native-installer\src\main\resources\manifest.json" /f
