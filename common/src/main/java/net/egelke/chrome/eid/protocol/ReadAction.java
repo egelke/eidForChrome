@@ -16,8 +16,8 @@ public class ReadAction extends Action {
         PHOTO
     }
     
-    private File file;
+    private File[] files;
     
-    public File getFile() { return file; }
-    public void setFile(File value) { file = value; }
+    public File[] getFiles() { return files; }
+    public void setFiles(File[] value) { files = value; }
 }

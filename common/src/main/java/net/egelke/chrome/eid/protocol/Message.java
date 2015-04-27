@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 public class Message<T extends Action> {
     public enum Type {
-        EID_REQ,
-        EID_RSP
+        EID_INPUT,
+        EID_OUTPUT
     };
     
     @JsonProperty
@@ -25,7 +25,7 @@ public class Message<T extends Action> {
         @JsonSubTypes.Type(value = ReadAction.class, name = "READ"),
         @JsonSubTypes.Type(value = SignAction.class, name = "SIGN"),
         @JsonSubTypes.Type(value = UIAction.class, name = "UI"),
-        @JsonSubTypes.Type(value = byte[].class, name = "DATA")
+        @JsonSubTypes.Type(value = Response.class, name = "RESPONSE")
     })
     private T action;
     

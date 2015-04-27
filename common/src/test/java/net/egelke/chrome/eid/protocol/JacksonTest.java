@@ -29,19 +29,19 @@ public class JacksonTest {
     @Test
     public void serializeStartMsg() throws Exception {
         Message<StartAction> msg = new Message<>();
-        msg.setType(Message.Type.EID_REQ);
+        msg.setType(Message.Type.EID_INPUT);
         msg.setAction(new StartAction());
         msg.getAction().setLanuage("nl");
         
         String json = mapper.writeValueAsString(msg);
 
-        assertEquals("{\"type\":\"EID_REQ\",\"action\":{\"type\":\"START\",\"language\":\"nl\"}}", json);
+        assertEquals("{\"type\":\"EID_INPUT\",\"action\":{\"type\":\"START\",\"language\":\"nl\"}}", json);
     }
     
     @Test
     public void deserializeSignMsg() throws Exception {
         String json = "{"
-                + "type: \"EID_REQ\","
+                + "type: \"EID_INPUT\","
                 + "action: {"
                 + "type: \"SIGN\","
                 + "key: \"AUTHENTICATION\","
@@ -51,7 +51,7 @@ public class JacksonTest {
         
         Message msg = mapper.readValue(json, Message.class);
         
-        assertEquals(Message.Type.EID_REQ, msg.getType());
+        assertEquals(Message.Type.EID_INPUT, msg.getType());
         
         assertTrue(msg.getAction()instanceof SignAction);
         Message<SignAction> signMsg = (Message<SignAction>) msg;
@@ -62,4 +62,17 @@ public class JacksonTest {
         assertArrayEquals("sign data".getBytes(), signMsg.getAction().getValue());
     }
     
+    @Test
+    public void serializeResponseMsg() throws Exception {
+        Message<Response> msg = new Message<>();
+        msg.setType(Message.Type.EID_OUTPUT);
+        msg.setAction(new Response());
+        msg.getAction().setData(new byte[2][]);
+        msg.getAction().getData()[0] = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 9 };
+        msg.getAction().getData()[1] = new byte[0];
+        
+        String json = mapper.writeValueAsString(msg);
+
+        assertEquals("{\"type\":\"EID_OUTPUT\",\"action\":{\"type\":\"RESPONSE\",\"data\":[\"AAECAwQFBgcJ\",\"\"]}}", json);
+    }
 }
