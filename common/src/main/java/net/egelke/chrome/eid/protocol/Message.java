@@ -25,7 +25,8 @@ public class Message<T extends Action> {
         @JsonSubTypes.Type(value = ReadAction.class, name = "READ"),
         @JsonSubTypes.Type(value = SignAction.class, name = "SIGN"),
         @JsonSubTypes.Type(value = UIAction.class, name = "UI"),
-        @JsonSubTypes.Type(value = Response.class, name = "RESPONSE")
+        @JsonSubTypes.Type(value = Response.class, name = "RESPONSE"),
+        @JsonSubTypes.Type(value = EndAction.class, name = "END"),
     })
     private T action;
     

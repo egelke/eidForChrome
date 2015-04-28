@@ -5,17 +5,17 @@
     <title>eID Test</title>
     <script type="text/javascript">
         function forward(event) {
-            if (event.source !== window || event.data.type !== 'eid-rsp') return;
+            if (event.source !== window || event.data.type !== 'EID_OUTPUT') return;
             
             console.log("Page: forward");
             console.dir(event.data);
             
             //TODO:send to the server to get a real response
             window.postMessage({
-                type: 'eid-req', 
-                action: 'cmd',
-                data: null
-            }, '*');
+                type: 'EID_INPUT', 
+                action: {
+                    type: 'END'
+                }, '*');
         }
         
         window.addEventListener("message", forward, false);

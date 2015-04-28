@@ -6,8 +6,11 @@ var Eid = (function () {
         this.port.onMessage.addListener(this.bgMsg);
         
         this.port.postMessage({
-            type: 'eid-req', 
-            action: 'start'
+            type: 'EID_INPUT', 
+            action: {
+                type: 'START',
+                language: 'nl'
+            }
         });
     }
     
@@ -15,14 +18,14 @@ var Eid = (function () {
         console.log('eid-ct: forward output');
         console.dir(msg); 
 
-        if (msg.action === 'end') {
+        if (msg.action.type === 'END') {
             this.port.disconnect();
             this.port = null;
         } else {
-            if (msg.action === 'UI') {
+            if (msg.action.type === 'UI') {
                 //TODO
             } 
-            window.postMessage(msg, "*");
+            //window.postMessage(msg, "*");
         }
     };
     
@@ -39,7 +42,7 @@ var Eid = (function () {
 })();
 
 function pgEvent(event) {
-    if (event.source !== window || event.data.type !== 'eid-req') return;
+    if (event.source !== window || event.data.type !== 'EID_INPUT') return;
     
     eid.pgMsg(event.data);
 }

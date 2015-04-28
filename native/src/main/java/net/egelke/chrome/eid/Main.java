@@ -5,15 +5,14 @@
  */
 package net.egelke.chrome.eid;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonWriter;
+import net.egelke.chrome.eid.protocol.EndAction;
+import net.egelke.chrome.eid.protocol.Message;
+import net.egelke.chrome.eid.protocol.StartAction;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,49 +23,60 @@ import org.slf4j.LoggerFactory;
  */
 public class Main {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private final static Logger logger = LoggerFactory.getLogger(Main.class);
+    
+    private final static ObjectMapper mapper = new ObjectMapper();
+    
+    private final static ByteBuffer bb = ByteBuffer.allocate(4);
     
     public static void main(String[] args) throws Throwable {
         try {
             logger.debug("Start native eid process");
-            
-            ByteBuffer bb = ByteBuffer.allocate(4);
             bb.order(ByteOrder.nativeOrder());
-            
-            byte[] buffer = new byte[4];
-            IOUtils.readFully(System.in, buffer);
-            bb.put(buffer);
-            bb.flip();
+            mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 
-            buffer = new byte[bb.getInt()];
-            IOUtils.readFully(System.in, buffer);
-            
-            JsonReader inputReader = Json.createReader(new ByteArrayInputStream(buffer));
-            JsonObject input = inputReader.readObject();
-
-            //do the business logic
-            logger.info("Received action: " + input.getString("action"));
-            
-            JsonObjectBuilder outputBuilder = Json.createObjectBuilder();
-            outputBuilder.add("type", "eid-rsp");
-            outputBuilder.add("action", "hello");
-            JsonObject output = outputBuilder.build();
-            
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            JsonWriter outputWriter = Json.createWriter(outputStream);
-            outputWriter.write(output);
-            outputWriter.close();
-            buffer = outputStream.toByteArray();
-
-            bb.rewind();
-            bb.putInt(buffer.length);
-            IOUtils.write(bb.array(), System.out);
-            IOUtils.write(buffer, System.out);
+            Message input;
+            do {
+                input = nextMessage();
+                Message output = new Message();
+                output.setType(Message.Type.EID_OUTPUT);
+                
+                //TODO:others
+                if (input.getAction() instanceof StartAction) {
+                    output.setAction(input.getAction());
+                } else {
+                    throw new UnsupportedOperationException();
+                }
+                
+                respond(output);
+            } while (!(input.getAction() instanceof EndAction));
             
             logger.debug("End native eid process");
         } catch (Throwable e) {
             logger.error("Fatal error", e);
             throw e;
         }
+    }
+    
+    private static Message nextMessage() throws IOException {
+        byte[] buffer = new byte[4];
+        IOUtils.readFully(System.in, buffer);
+        bb.rewind();
+        bb.put(buffer);
+        bb.flip();
+
+        buffer = new byte[bb.getInt()];
+        IOUtils.readFully(System.in, buffer);
+
+        return mapper.readValue(buffer, Message.class);
+    }
+    
+    private static void respond(Message msg) throws IOException {
+        byte[] buffer = mapper.writeValueAsBytes(msg);
+        
+        bb.rewind();
+        bb.putInt(buffer.length);
+        IOUtils.write(bb.array(), System.out);
+        IOUtils.write(buffer, System.out);
     }
 }

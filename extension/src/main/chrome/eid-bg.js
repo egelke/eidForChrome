@@ -24,7 +24,7 @@ function onCtMsg(msg) {
     console.log('eid-bg: forward input');
     console.dir(msg);
 
-    if (msg.action === "start" && this.svPort == null) {
+    if (msg.action.type === "START" && this.svPort == null) {
         chrome.pageAction.show(this.ctPort.sender.tab.id);
 
         this.svPort = chrome.runtime.connectNative(application);
